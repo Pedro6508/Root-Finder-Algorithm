@@ -2,9 +2,10 @@ module Main where
 
 import Text.Read.Lex (Lexeme(String, Number, Char))
 import Data.Char (toTitle)
-import Text.ParserCombinators.ReadP (string)
+import Text.ParserCombinators.ReadP (string, get)
 import Text.Printf (printf, formatString)
 import Data.Foldable (Foldable(toList))
+import Data.Functor.Classes (eq2)
 
 eps = 0.01
 coef f a b = (f b - f a)/(b - a)
@@ -15,7 +16,7 @@ linearEq f a b x = coef f a b *(x - a) + f a
 inverLinearEq f a b y = (y - f a)/coef f a b + a
 
 sq x = x*x
-eq2ndDeg a b x = sq (x - a) - b
+eq2nd a b x = sq (x - a) - b
 -- s = linearEq eq2nddeg 2 4
 
 linearRoot :: Fractional a => (a -> a) -> a -> a -> a
@@ -49,8 +50,23 @@ rfindRoot f a b = do
     rfindRoot g x y
 
 main = do
-  putStrLn "\tRoot Finder Algorithm"
-  let 
-  findRoot eq2ndDeg 1.4 6 
+  putStrLn " Root Finder Algorithm"
+  putStrLn "- f(x) = (x - a)ˆ2 - b"
+  putStrLn "- g(x) = (x - c)ˆ2 - d"
+  putStrLn "- Eq -> f(g(x))"
+  putStrLn "a = "
+  raw_a <- getLine
+  putStrLn "b = "
+  raw_b <- getLine 
+  putStrLn "c = "
+  raw_c <- getLine 
+  putStrLn "d = "
+  raw_d <- getLine 
+  let a = read raw_a :: Double
+  let b = read raw_b :: Double
+  let c = read raw_c :: Double
+  let d = read raw_d :: Double
+  let f x = eq2nd c d (eq2nd a b x) 
+  findRoot f 0.5 4.25 
 
   
