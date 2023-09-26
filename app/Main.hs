@@ -7,26 +7,33 @@ import Text.Printf (printf, formatString)
 import Data.Foldable (Foldable(toList))
 import Data.Functor.Classes (eq2)
 
+-- eps -> Epsilon 
 eps = 0.01
+
+-- coef -> Slope of Line AB
 coef f a b = (f b - f a)/(b - a)
+
+-- derv -> Derivative Approximation
 derv f x = coef f x (x + eps) 
 
+-- linearEq -> Line AB Equation
 linearEq f a b x = coef f a b *(x - a) + f a  
 
-inverLinearEq f a b y = (y - f a)/coef f a b + a
-
+-- sq(x) -> xˆ2
 sq x = x*x
-eq2nd a b x = sq (x - a) - b
--- s = linearEq eq2nddeg 2 4
 
+-- eq2nd -> 2nd Degree Equation
+eq2nd a b x = sq (x - a) - b
+
+-- linearRoot -> root-finder for linear equation
 linearRoot :: Fractional a => (a -> a) -> a -> a -> a
 linearRoot f a b = do
   let h = linearEq f a b
   (- h a)/coef h a b + a
 
+-- mid -> midpoint between AB and more 
 mid f a b = do
   let tg = coef f a b
-  let s x = tg*(x - a) + f a
   let g x = tg * f x 
   let mdot = (b + a)/2
 
@@ -38,6 +45,7 @@ mid f a b = do
 findRoot f a b = rfindRoot f (min a b) (max a b)
 
 -- { f(b) > 0 > f(a); b > a; f is continuous in (a, b) ; eps > 0 }
+rfindRoot :: (Double -> Double) -> Double -> Double -> IO ()
 rfindRoot f a b = do 
   let (g, x, y) = mid f a b
   let r = (y + x)/2
@@ -48,9 +56,9 @@ rfindRoot f a b = do
     print (Just r)
   else 
     rfindRoot g x y
-
+-- { f(b) > 0 > f(a); b > a; g is continuous in (a, b) ; |r - x0| < eps  }
 main = do
-  putStrLn " Root Finder Algorithm"
+  putStrLn " Root-finding Algorithm"
   putStrLn "- f(x) = (x - a)ˆ2 - b"
   putStrLn "- g(x) = (x - c)ˆ2 - d"
   putStrLn "- Eq -> f(g(x))"
