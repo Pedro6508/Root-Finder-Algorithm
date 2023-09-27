@@ -57,6 +57,7 @@ rfindRoot f a b = do
   else 
     rfindRoot g x y
 -- { f(b) > 0 > f(a); b > a; g is continuous in (a, b) ; |r - x0| < eps  }
+
 main = do
   putStrLn " Root-finding Algorithm"
   putStrLn "- f(x) = (x - a)ˆ2 - b"
@@ -75,6 +76,4 @@ main = do
   let c = read raw_c :: Double
   let d = read raw_d :: Double
   let f x = eq2nd c d (eq2nd a b x) 
-  findRoot f 0.5 4.25 
-
-  
+  findRoot f 0.5 3 
